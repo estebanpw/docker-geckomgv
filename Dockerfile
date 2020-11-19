@@ -43,7 +43,15 @@ RUN sed -i '/from django.urls import reverse/c\from django.core.urlresolvers imp
 RUN . /externaltool/GeckoMGVvenv/bin/activate && python2.7 /externaltool/geckomgv/manage.py migrate
 # A super user is already available. See README. 
 #RUN . /externaltool/GeckoMGVvenv/bin/activate && echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python2.7 /externaltool/geckomgv/manage.py shell
+
+# Custom copying of database
 ADD src/db.sqlite3 .
+ADD src/media/scripts /externaltool/geckomgv/media/scripts
+ADD src/MGV/templates/MSAvisualizer.html /externaltool/geckomgv/MGV/templates
+ADD src/MGV/static/js/MGV/latest_msa.min.gz.js /externaltool/geckomgv/MGV/static/js/MGV
+ADD src/MGV/static/js/MGV/CanvasPainter.js /externaltool/geckomgv/MGV/static/js/MGV
+ADD src/scripts/internalServices.py /externaltool/geckomgv/scripts
+
 
 USER root
 

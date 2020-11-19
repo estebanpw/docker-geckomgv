@@ -1,0 +1,15 @@
+{%extends "includes/basic.html" %}
+{%block content%}
+
+<link type=text/css rel=stylesheet href=https://s3-eu-west-1.amazonaws.com/biojs/msa/latest/msa.css />
+<div id='menu'></div>
+<div id='msa'></div>
+<!--<script src=//cdn.bio.sh/msa/1.0/msa.min.gz.js></script>-->
+<script src="/static/js/MGV/latest_msa.min.gz.js"></script>
+<script type="text/javascript">
+        drawMSA("{{ content | escapejs }}");
+        $(".biojs_msa_headers").width(158);
+        $("#canv_0").remove()
+</script>
+
+{%endblock%}
