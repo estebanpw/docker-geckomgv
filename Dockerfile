@@ -18,13 +18,21 @@ RUN mkdir -p /var/log/supervisor
 # Copy supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Install git
+# Install git, python, venv
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y git
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y python virtualenv
+
+# Add GECKO-MGV user and switch to it
+RUN useradd -ms /bin/bash geckouser
+
+# Create folder for GECKO-MGV and change permissions
+RUN mkdir /externaltool
+RUN chown geckouser /externaltool
+USER geckouser
 
 # Install GECKO-MGV
-RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y python virtualenv
-RUN mkdir /externaltool
 RUN git clone https://github.com/Sergiodiaz53/GeckoMGV.git /externaltool/geckomgv
+WORKDIR /externaltool/geckomgv
 RUN virtualenv -p python2.7 /externaltool/GeckoMGVvenv
 RUN . /externaltool/GeckoMGVvenv/bin/activate && pip install django==1.7.9 django-forms-builder django_extensions
 
@@ -34,6 +42,8 @@ RUN sed -i '/from django.urls import reverse/c\from django.core.urlresolvers imp
 ## Configure GECKO-MGV
 RUN . /externaltool/GeckoMGVvenv/bin/activate && python2.7 /externaltool/geckomgv/manage.py migrate
 RUN . /externaltool/GeckoMGVvenv/bin/activate && echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python2.7 /externaltool/geckomgv/manage.py shell
+
+USER root
 
 # Mark folders as imported from the host.
 VOLUME ["/export/", "/data/", "/var/lib/docker"]
