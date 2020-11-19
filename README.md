@@ -6,5 +6,12 @@ Build the container with `sudo docker build -t geckomgv-docker .` and run the co
 
 1. Open a browser
 2. Navigate to localhost:5000
-3. Thats it!
+3. Login with user "user" and password "user"
+4. You can now use GECKO-MGV services
 
+## Changing the configuration of GECKO-MGV
+If you want to create users, delete files, add services, etc., you can do this by logging into the django administration backend. Follow these steps:
+
+1. Navigate to localhost:5000/admin
+2. Enter login user "Admin" and password "Pass"
+3. You have now access to the backend
